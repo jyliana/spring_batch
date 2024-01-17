@@ -1,0 +1,69 @@
+server:
+  port: 9009
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  application:
+    name: Comments
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        transaction:
+          jta:
+            platform: org.springframework.transaction.jta.JtaTransactionManager
+        jdbc:
+          batch_size: 5
+        order_inserts: true
+        default_batch_fetch_size: 10
+        batch_fetch_style: padded
+        types:
+          print:
+            banner: false
+  sql:
+    init:
+      mode: always
+      platform: postgres
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/blog\
+      ?createDatabaseIfNotExist=true\
+      &allowPublicKeyRetrieval=true\
+      &useSSL=false\
+      &useUnicode=true\
+      &characterEncoding=UTF-8\
+      &serverTimezone=UTC"
+    username: postgres
+    password: root
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      schema: public
+
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      enabled: true
+
+logging:
+  level:
+    com.journey: DEBUG
+
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: prometheus, metrics, health
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
